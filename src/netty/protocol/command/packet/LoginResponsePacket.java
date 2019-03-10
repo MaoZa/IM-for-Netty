@@ -1,6 +1,8 @@
-package netty.protocol.command;
+package netty.protocol.command.packet;
 
 import lombok.Data;
+import netty.protocol.command.Command;
+import netty.protocol.command.Packet;
 
 /**
  * @author Cap_Sub
@@ -13,6 +15,8 @@ public class LoginResponsePacket extends Packet {
     private Boolean success;
 
     private Byte version;
+
+    private String userId;
 
     @Override
     public Byte getCommand() {

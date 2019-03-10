@@ -1,12 +1,9 @@
 package netty.client.handler;
 
-import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
-import netty.protocol.command.LoginResponsePacket;
-import netty.protocol.command.MessageResponsePacket;
-import netty.protocol.command.Packet;
-import netty.protocol.command.PacketCodeC;
+import netty.model.SessionUtil;
+import netty.protocol.command.packet.LoginResponsePacket;
 import netty.utils.LoginUtil;
 
 import java.util.Date;
@@ -21,12 +18,17 @@ public class LoginResponseHandler extends SimpleChannelInboundHandler<LoginRespo
 
             if (loginResponsePacket.getSuccess()) {
                 LoginUtil.markAsLogin(channelHandlerContext.channel());
-                System.out.println(new Date() + ": 客户端登录成功");
+                System.out.println(new Date() + ": 客户端登录成功, 你的userId为:" + loginResponsePacket.getUserId());
             } else {
                 System.out.println(new Date() + ": 客户端登录失败，原因：" + loginResponsePacket.getReason());
             }
             channelHandlerContext.channel();
 
+    }
+
+    @Override
+    public void channelInactive(ChannelHandlerContext ctx) {
+        System.out.println("客户端连接被关闭!");
     }
 
 }

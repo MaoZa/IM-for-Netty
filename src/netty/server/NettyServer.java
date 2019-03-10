@@ -11,7 +11,7 @@ import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
 import netty.coder.PacketDecoder;
 import netty.coder.PacketEncoder;
-import netty.server.pipeline.*;
+import netty.server.handler.*;
 
 /**
  * @author Cap_Sub
@@ -45,22 +45,26 @@ public class NettyServer {
                 .childHandler(new ChannelInitializer<NioSocketChannel>() {
                     @Override
                     protected void initChannel(NioSocketChannel ch) {
-//                        ch.pipeline().addLast(new ServerHandler());
+//                        ch.handler().addLast(new ServerHandler());
 //                        // inBound，处理读数据的逻辑链
-//                        ch.pipeline().addLast(new InBoundHandlerA());
-//                        ch.pipeline().addLast(new InBoundHandlerB());
-//                        ch.pipeline().addLast(new InBoundHandlerC());
+//                        ch.handler().addLast(new InBoundHandlerA());
+//                        ch.handler().addLast(new InBoundHandlerB());
+//                        ch.handler().addLast(new InBoundHandlerC());
 //
 //                        // inBound，处理写数据的逻辑链
-//                        ch.pipeline().addLast(new OutBoundHandlerA());
-//                        ch.pipeline().addLast(new OutBoundHandlerB());
-//                        ch.pipeline().addLast(new OutBoundHandlerC());
+//                        ch.handler().addLast(new OutBoundHandlerA());
+//                        ch.handler().addLast(new OutBoundHandlerB());
+//                        ch.handler().addLast(new OutBoundHandlerC());
                         //通用粘包拆包处理器
                         ch.pipeline().addLast(new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 7, 4));
+                        //Handler生命周期测试
+//                        ch.pipeline().addLast(new LifeCyCleTestHandler());
                         //消息解码处理器
                         ch.pipeline().addLast(new PacketDecoder());
                         //登录请求处理器
                         ch.pipeline().addLast(new LoginRequestHandler());
+                        //新增加用户认证handler
+                        ch.pipeline().addLast(new AuthHandler());
                         //消息请求处理器
                         ch.pipeline().addLast(new MessageRequestHandler());
                         //消息编码处理器

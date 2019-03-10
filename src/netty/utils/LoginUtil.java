@@ -4,6 +4,8 @@ import io.netty.channel.Channel;
 import io.netty.util.Attribute;
 import netty.protocol.command.Attributes;
 
+import java.util.Random;
+
 /**
  * @author Cap_Sub
  */
@@ -17,5 +19,15 @@ public class LoginUtil {
         Attribute<Boolean> loginAttr = channel.attr(Attributes.LOGIN);
         return loginAttr.get() != null;
     }
+
+    public static String randomUserId(){
+        Random random = new Random();
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < 5; i++) {
+            sb.append(random.nextInt(10));
+        }
+        return sb.toString();
+    }
+
 
 }

@@ -1,12 +1,13 @@
-package netty.protocol.command;
+package netty.client.handler;
 
 import lombok.Data;
+import netty.protocol.command.Command;
+import netty.protocol.command.Packet;
 
-/**
- * @author Cap_Sub
- */
 @Data
 public class MessageRequestPacket extends Packet {
+
+    private String toUserId;
 
     private String message;
 
@@ -14,5 +15,4 @@ public class MessageRequestPacket extends Packet {
     public Byte getCommand() {
         return Command.MESSAGE_REQUEST;
     }
-
 }
