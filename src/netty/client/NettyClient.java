@@ -9,14 +9,18 @@ import io.netty.channel.ChannelOption;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
+import netty.client.handler.CreateGroupResponseHandler;
 import netty.client.handler.LoginResponseHandler;
 import netty.client.handler.MessageResponseHandler;
 import netty.model.SessionUtil;
+import netty.protocol.command.ConsoleCommandManager;
+import netty.protocol.command.LoginConsoleCommand;
 import netty.protocol.command.packet.LoginRequestPacket;
 import netty.protocol.command.packet.MessageRequestPacket;
 import netty.protocol.command.PacketCodeC;
 import netty.coder.PacketDecoder;
 import netty.coder.PacketEncoder;
+import netty.server.handler.CreateGroupRequestHandler;
 import netty.utils.LoginUtil;
 
 import java.util.Date;
@@ -60,6 +64,8 @@ public class NettyClient {
                         ch.pipeline().addLast(new ClientHandler());
                         //登录响应处理器
                         ch.pipeline().addLast(new LoginResponseHandler());
+                        //创建群聊响应处理器
+                        ch.pipeline().addLast(new CreateGroupResponseHandler());
                         //消息响应处理器
                         ch.pipeline().addLast(new MessageResponseHandler());
                         //消息编码处理器
@@ -108,38 +114,18 @@ public class NettyClient {
 
     private static void startConsoleThread(Channel channel) {
         Scanner sc = new Scanner(System.in);
-        LoginRequestPacket loginRequestPacket = new LoginRequestPacket();
+        ConsoleCommandManager consoleCommandManager = new ConsoleCommandManager();
+        LoginConsoleCommand loginConsoleCommand = new LoginConsoleCommand();
 
         new Thread(() -> {
             while (!Thread.interrupted()) {
                 if (!LoginUtil.hasLogin(channel)) {
-                    System.out.print("输入用户名登录: ");
-                    String username = sc.nextLine();
-                    loginRequestPacket.setUsername(username);
-
-                    // 密码使用默认的
-                    loginRequestPacket.setPassword("pwd");
-
-                    // 发送登录数据包
-                    channel.writeAndFlush(loginRequestPacket);
-                    waitForLoginResponse();
+                    loginConsoleCommand.exec(sc, channel);
                 } else {
-                    System.out.println("开始发送消息");
-                    System.out.print("请输入目标userId: ");
-                    String toUserId = sc.next();
-                    System.out.print("请输入内容: ");
-                    String message = sc.next();
-                    channel.writeAndFlush(new MessageRequestPacket(toUserId, message));
+                    consoleCommandManager.exec(sc, channel);
                 }
             }
         }).start();
-    }
-
-    private static void waitForLoginResponse() {
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException ignored) {
-        }
     }
 
 }

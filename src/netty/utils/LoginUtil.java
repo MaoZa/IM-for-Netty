@@ -20,14 +20,5 @@ public class LoginUtil {
         return loginAttr.get() != null;
     }
 
-    public static String randomUserId(){
-        Random random = new Random();
-        StringBuffer sb = new StringBuffer();
-        for (int i = 0; i < 5; i++) {
-            sb.append(random.nextInt(10));
-        }
-        return sb.toString();
-    }
-
 
 }

@@ -2,10 +2,7 @@ package netty.protocol.command;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
-import netty.protocol.command.packet.LoginRequestPacket;
-import netty.protocol.command.packet.LoginResponsePacket;
-import netty.protocol.command.packet.MessageRequestPacket;
-import netty.protocol.command.packet.MessageResponsePacket;
+import netty.protocol.command.packet.*;
 import netty.serializer.Serializer;
 import netty.serializer.impl.JSONSerializer;
 
@@ -34,6 +31,8 @@ public class PacketCodeC {
         packetTypeMap.put(LOGIN_RESPONSE, LoginResponsePacket.class);
         packetTypeMap.put(MESSAGE_REQUEST, MessageRequestPacket.class);
         packetTypeMap.put(MESSAGE_RESPONSE, MessageResponsePacket.class);
+        packetTypeMap.put(CREATEGROUP_REQUEST, CreateGroupRequestPacket.class);
+        packetTypeMap.put(CREATEGROUP_RESPONSE, CreateGroupResponsePacket.class);
 
         serializerMap = new HashMap<>();
         Serializer serializer = new JSONSerializer();

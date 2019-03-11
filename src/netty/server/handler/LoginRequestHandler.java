@@ -9,6 +9,7 @@ import netty.model.SessionUtil;
 import netty.protocol.command.packet.LoginRequestPacket;
 import netty.protocol.command.packet.LoginResponsePacket;
 import netty.protocol.command.PacketCodeC;
+import netty.utils.IDUtil;
 import netty.utils.LoginUtil;
 
 /**
@@ -25,12 +26,12 @@ public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginReques
         loginResponsePacket.setVersion(loginRequestPacket.getVersion());
         if (valid(loginRequestPacket)) {
             loginResponsePacket.setSuccess(true);
-            String userId = LoginUtil.randomUserId();
+            String userId = IDUtil.randomUserId();
             loginResponsePacket.setUserId(userId);
             SessionUtil.bindSession(new Session(userId, loginRequestPacket.getUsername()), channelHandlerContext.channel());
             LoginUtil.markAsLogin(channelHandlerContext.channel());
-            System.out.print(loginRequestPacket.getUsername() + " 登录成功");
-            System.out.println("  userId: " + loginResponsePacket.getUserId());
+            System.out.print("[" + loginRequestPacket.getUsername() + "]登录成功");
+            System.out.println("[userId]" + loginResponsePacket.getUserId());
         } else {
             loginResponsePacket.setReason("账号密码校验失败");
             loginResponsePacket.setSuccess(false);
@@ -42,8 +43,9 @@ public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginReques
     }
 
     // 用户断线之后取消绑定
+    @Override
     public void channelInactive(ChannelHandlerContext ctx) {
-        System.out.println("用户下线， 取消Map绑定");
+        System.out.println("用户下线，取消Map绑定");
         SessionUtil.unBindSession(ctx.channel());
     }
 

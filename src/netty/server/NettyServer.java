@@ -65,6 +65,8 @@ public class NettyServer {
                         ch.pipeline().addLast(new LoginRequestHandler());
                         //新增加用户认证handler
                         ch.pipeline().addLast(new AuthHandler());
+                        // 添加一个 handler
+                        ch.pipeline().addLast(new CreateGroupRequestHandler());
                         //消息请求处理器
                         ch.pipeline().addLast(new MessageRequestHandler());
                         //消息编码处理器
