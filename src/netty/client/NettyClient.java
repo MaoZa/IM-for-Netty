@@ -9,9 +9,7 @@ import io.netty.channel.ChannelOption;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
-import netty.client.handler.CreateGroupResponseHandler;
-import netty.client.handler.LoginResponseHandler;
-import netty.client.handler.MessageResponseHandler;
+import netty.client.handler.*;
 import netty.model.SessionUtil;
 import netty.protocol.command.ConsoleCommandManager;
 import netty.protocol.command.LoginConsoleCommand;
@@ -21,6 +19,9 @@ import netty.protocol.command.PacketCodeC;
 import netty.coder.PacketDecoder;
 import netty.coder.PacketEncoder;
 import netty.server.handler.CreateGroupRequestHandler;
+import netty.server.handler.IMIdleStateHandler;
+import netty.server.handler.ListGroupMembersRequestHandler;
+import netty.server.handler.PacketCodecHandler;
 import netty.utils.LoginUtil;
 
 import java.util.Date;
@@ -56,20 +57,22 @@ public class NettyClient {
                 .handler(new ChannelInitializer<Channel>() {
                     @Override
                     protected void initChannel(Channel ch) {
+                        ch.pipeline().addLast(new IMIdleStateHandler());
+                        ch.pipeline().addLast(PacketCodecHandler.INSTANCE);
+                        ch.pipeline().addLast(new HeartBeatTimerHandler());
                         //通用粘包拆包处理器
                         ch.pipeline().addLast(new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 7, 4));
-                        //消息解码处理器
-                        ch.pipeline().addLast(new PacketDecoder());
-                        //初始化处理器
-                        ch.pipeline().addLast(new ClientHandler());
                         //登录响应处理器
                         ch.pipeline().addLast(new LoginResponseHandler());
                         //创建群聊响应处理器
                         ch.pipeline().addLast(new CreateGroupResponseHandler());
+                        //加入退出群聊响应处理器
+                        ch.pipeline().addLast(new JoinGroupResponseHandler());
+                        ch.pipeline().addLast(new GroupMessageResponseHandler());
+                        //查询群组信息响应处理器
+                        ch.pipeline().addLast(new ListGroupMembersResponseHandler());
                         //消息响应处理器
                         ch.pipeline().addLast(new MessageResponseHandler());
-                        //消息编码处理器
-                        ch.pipeline().addLast(new PacketEncoder());
                     }
                 })
                 /**

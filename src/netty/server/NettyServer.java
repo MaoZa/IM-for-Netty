@@ -9,8 +9,10 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
+import netty.client.handler.LoginResponseHandler;
 import netty.coder.PacketDecoder;
 import netty.coder.PacketEncoder;
+import netty.protocol.command.packet.CreateGroupRequestPacket;
 import netty.server.handler.*;
 
 /**
@@ -55,22 +57,42 @@ public class NettyServer {
 //                        ch.handler().addLast(new OutBoundHandlerA());
 //                        ch.handler().addLast(new OutBoundHandlerB());
 //                        ch.handler().addLast(new OutBoundHandlerC());
+                        //连接异常断开处理器
+//                        ch.pipeline().addLast(new ConnectExceptionCloseHandler());
                         //通用粘包拆包处理器
-                        ch.pipeline().addLast(new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 7, 4));
+//                        ch.pipeline().addLast(new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 7, 4));
                         //Handler生命周期测试
 //                        ch.pipeline().addLast(new LifeCyCleTestHandler());
                         //消息解码处理器
-                        ch.pipeline().addLast(new PacketDecoder());
+//                        ch.pipeline().addLast(new PacketDecoder());
                         //登录请求处理器
-                        ch.pipeline().addLast(new LoginRequestHandler());
+//                        ch.pipeline().addLast(LoginRequestHandler.INSTANCE);
                         //新增加用户认证handler
-                        ch.pipeline().addLast(new AuthHandler());
-                        // 添加一个 handler
-                        ch.pipeline().addLast(new CreateGroupRequestHandler());
+//                        ch.pipeline().addLast(AuthHandler.INSTANCE);
+                        //群发消息handler
+//                        ch.pipeline().addLast(GroupMessageRequestHandler.INSTANCE);
+                        //创建群组handler
+//                        ch.pipeline().addLast(CreateGroupRequestHandler.INSTANCE);
+                        //加入群组handler
+//                        ch.pipeline().addLast(JoinGroupRequestHandler.INSTANCE);
+                        //退出群组handler
+//                        ch.pipeline().addLast(QuitGroupRequestHandler.INSTANCE);
+                        //获取群组信息handler
+//                        ch.pipeline().addLast(ListGroupMembersRequestHandler.INSTANCE);
                         //消息请求处理器
-                        ch.pipeline().addLast(new MessageRequestHandler());
+//                        ch.pipeline().addLast(MessageRequestHandler.INSTANCE);
                         //消息编码处理器
-                        ch.pipeline().addLast(new PacketEncoder());
+//                        ch.pipeline().addLast(new PacketEncoder());
+                        /**
+                         * 压缩后的Handler
+                         */
+                        ch.pipeline().addLast(new IMIdleStateHandler());
+                        ch.pipeline().addLast(new Spliter());
+                        ch.pipeline().addLast(PacketCodecHandler.INSTANCE);
+                        ch.pipeline().addLast(LoginRequestHandler.INSTANCE);
+                        ch.pipeline().addLast(HeartBeatRequestHandler.INSTANCE);
+                        ch.pipeline().addLast(AuthHandler.INSTANCE);
+                        ch.pipeline().addLast(IMHandler.INSTANCE);
                     }
                 })
                 /**

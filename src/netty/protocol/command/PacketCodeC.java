@@ -33,6 +33,17 @@ public class PacketCodeC {
         packetTypeMap.put(MESSAGE_RESPONSE, MessageResponsePacket.class);
         packetTypeMap.put(CREATEGROUP_REQUEST, CreateGroupRequestPacket.class);
         packetTypeMap.put(CREATEGROUP_RESPONSE, CreateGroupResponsePacket.class);
+        packetTypeMap.put(JOINGROUP_REQUEST, JoinGroupRequestPacket.class);
+        packetTypeMap.put(JOINGROUP_RESPONSE, JoinGroupResponsePacket.class);
+        packetTypeMap.put(QUITGROUP_REQUEST, QuitGroupRequestPacket.class);
+        packetTypeMap.put(QUITGROUP_RESPONSE, QuitGroupResponsePacket.class);
+        packetTypeMap.put(LISTGROUP_REQUEST, ListGroupMembersRequestPacket.class);
+        packetTypeMap.put(LISTGROUP_RESPONSE, ListGroupMembersResponsePacket.class);
+        packetTypeMap.put(HEARTBEAT_REQUEST, HeartBeatRequestPacket.class);
+        packetTypeMap.put(HEARTBEAT_RESPONSE, HeartBeatResponsePacket.class);
+        packetTypeMap.put(GROUPMESSAGE_REQUEST, GroupMessageRequestPacket.class);
+        packetTypeMap.put(GROUPMESSAGE_RESPONSE, GroupMessageResponsePacket.class);
+
 
         serializerMap = new HashMap<>();
         Serializer serializer = new JSONSerializer();

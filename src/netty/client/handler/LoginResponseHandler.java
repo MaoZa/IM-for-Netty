@@ -19,6 +19,7 @@ public class LoginResponseHandler extends SimpleChannelInboundHandler<LoginRespo
             if (loginResponsePacket.getSuccess()) {
                 LoginUtil.markAsLogin(channelHandlerContext.channel());
                 System.out.println(new Date() + ": 客户端登录成功, 你的userId为:" + loginResponsePacket.getUserId());
+                System.out.println("输入menu回车显示菜单");
             } else {
                 System.out.println(new Date() + ": 客户端登录失败，原因：" + loginResponsePacket.getReason());
             }

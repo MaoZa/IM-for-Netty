@@ -1,23 +1,24 @@
 package netty.protocol.command.packet;
 
 import lombok.Data;
+import netty.model.Session;
 import netty.protocol.command.Command;
 import netty.protocol.command.Packet;
+
+import java.util.List;
 
 /**
  * @author Cap_Sub
  */
 @Data
-public class JoinGroupResponsePacket extends Packet {
-
-    private Boolean success;
+public class ListGroupMembersResponsePacket extends Packet {
 
     private String groupId;
 
-    private String reason;
+    private List<Session> sessionList;
 
     @Override
     public Byte getCommand() {
-        return Command.JOINGROUP_RESPONSE;
+        return Command.LISTGROUP_RESPONSE;
     }
 }

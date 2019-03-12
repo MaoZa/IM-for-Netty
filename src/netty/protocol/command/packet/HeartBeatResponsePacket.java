@@ -8,16 +8,12 @@ import netty.protocol.command.Packet;
  * @author Cap_Sub
  */
 @Data
-public class JoinGroupResponsePacket extends Packet {
+public class HeartBeatResponsePacket extends Packet {
 
-    private Boolean success;
-
-    private String groupId;
-
-    private String reason;
+    private Byte aByte = 1;
 
     @Override
     public Byte getCommand() {
-        return Command.JOINGROUP_RESPONSE;
+        return Command.HEARTBEAT_RESPONSE;
     }
 }
