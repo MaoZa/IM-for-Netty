@@ -1,4 +1,4 @@
-package netty.server.handler;
+package netty.client.handler;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.timeout.IdleStateEvent;
