@@ -1,7 +1,7 @@
 package netty.client;
 
+
 import io.netty.bootstrap.Bootstrap;
-import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -10,18 +10,8 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import netty.client.handler.*;
-import netty.model.SessionUtil;
 import netty.protocol.command.ConsoleCommandManager;
 import netty.protocol.command.LoginConsoleCommand;
-import netty.protocol.command.packet.LoginRequestPacket;
-import netty.protocol.command.packet.MessageRequestPacket;
-import netty.protocol.command.PacketCodeC;
-import netty.coder.PacketDecoder;
-import netty.coder.PacketEncoder;
-import netty.server.handler.CreateGroupRequestHandler;
-import netty.server.handler.IMIdleStateHandler;
-import netty.server.handler.ListGroupMembersRequestHandler;
-import netty.server.handler.PacketCodecHandler;
 import netty.utils.LoginUtil;
 
 import java.util.Date;
@@ -88,7 +78,7 @@ public class NettyClient {
                  */
                 .option(ChannelOption.TCP_NODELAY, true);
 
-                connect(bootstrap, "127.0.0.1", 8000, MAX_RETRY);
+                connect(bootstrap, "0.0.0.0", 8000, MAX_RETRY);
 
     }
 

@@ -19,12 +19,14 @@ public class LoginConsoleCommand implements ConsoleCommand {
         }
         LoginRequestPacket loginRequestPacket = new LoginRequestPacket();
 
-        System.out.print("输入用户名登录: ");
-        String username = scanner.nextLine();
-        loginRequestPacket.setUsername(username);
+        System.out.print("输入邮箱: ");
+        String email = scanner.next();
 
-        // 密码使用默认的
-        loginRequestPacket.setPassword("pwd");
+        System.out.print("输入密码: ");
+        String password = scanner.next();
+
+        loginRequestPacket.setEmail(email);
+        loginRequestPacket.setPassword(password);
 
         // 发送登录数据包
         channel.writeAndFlush(loginRequestPacket);
